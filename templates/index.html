@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        Container Loading Optimization
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+
+<body>
+
+<header>
+
+    <div class="logo">
+        ▰ EGGER
+    </div>
+
+    <span>
+        Home
+    </span>
+
+</header>
+
+
+<main>
+
+    <h1>
+        Container Loading Optimization
+    </h1>
+
+
+    <!-- =========================================
+         CONTAINER DATA
+    ========================================== -->
+
+    <section>
+
+        <h3>
+            Container Data
+        </h3>
+
+
+        <div class="grid container-grid">
+
+
+            <!-- CONTAINER TYPE -->
+
+            <label>
+
+                Container Name
+
+                <select id="cname">
+
+                    <option value="Truck">
+                        Truck
+                    </option>
+
+                    <option value="Conestoga">
+                        Conestoga
+                    </option>
+
+                    <option value="Custom">
+                        Custom
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <!-- LENGTH -->
+
+            <label>
+
+                Length (ft)
+
+                <input
+                    id="cl"
+                    type="number"
+                    value="53"
+                    step="0.01"
+                    readonly
+                >
+
+                <small id="lengthMM">
+                    16154 mm
+                </small>
+
+            </label>
+
+
+            <!-- WIDTH -->
+
+            <label>
+
+                Width (ft)
+
+                <input
+                    id="cw"
+                    type="number"
+                    value="8.33"
+                    step="0.01"
+                    readonly
+                >
+
+                <small id="widthMM">
+                    2540 mm
+                </small>
+
+            </label>
+
+
+            <!-- HEIGHT -->
+
+            <label>
+
+                Height (ft)
+
+                <input
+                    id="ch"
+                    type="number"
+                    value="9.17"
+                    step="0.01"
+                    readonly
+                >
+
+                <small id="heightMM">
+                    2794 mm
+                </small>
+
+            </label>
+
+
+            <!-- MAX WEIGHT -->
+
+            <label>
+
+                Max. Weight
+
+                <input
+                    id="cweight"
+                    type="number"
+                    value="10000"
+                    min="0"
+                >
+
+            </label>
+
+
+        </div>
+
+
+        <!-- Information text -->
+
+        
+
+    </section>
+
+
+    <!-- =========================================
+         PACKAGE DATA
+    ========================================== -->
+
+    <section>
+
+        <div class="section-head">
+
+            <h3>
+                Package Data
+            </h3>
+
+            <button id="add">
+                Add Package
+            </button>
+
+        </div>
+
+
+        <div id="packages"></div>
+
+    </section>
+
+
+    <!-- =========================================
+         GENERATE BUTTON
+    ========================================== -->
+
+    <div class="actions">
+
+        <button
+            class="generate"
+            id="generate"
+        >
+            Generate Packed Container
+        </button>
+
+    </div>
+
+
+    <!-- =========================================
+         PACKING INFORMATION
+    ========================================== -->
+
+    <section>
+
+        <h2>
+            Packing Information
+        </h2>
+
+        <div
+            id="stats"
+            class="stats"
+        >
+            Enter values and generate a packing result.
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         3D CONTAINER VIEW
+    ========================================== -->
+
+    <section>
+
+        <h2>
+            3D Container View
+        </h2>
+
+        <div id="viewer"></div>
+
+        <p class="hint">
+            Drag to rotate ·
+            Scroll to zoom ·
+            Right-drag to pan
+        </p>
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================
+     THREE.JS IMPORT MAP
+========================================== -->
+
+<script type="importmap">
+
+{
+    "imports": {
+
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+
+        "three/addons/":
+        "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+}
+
+</script>
+
+
+<!-- =========================================
+     APPLICATION JAVASCRIPT
+========================================== -->
+
+<script
+    type="module"
+    src="{{ url_for('static', filename='app.js') }}"
+></script>
+
+
+</body>
+
+</html>
