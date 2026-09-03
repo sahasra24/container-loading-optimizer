@@ -417,10 +417,6 @@ function addPackage() {
     packages.appendChild(d);
 
 
-    /* =====================================================
-       DIMENSION CONVERSION
-    ===================================================== */
-
     const lengthInput =
         d.querySelector(".pl");
 
@@ -488,10 +484,6 @@ function addPackage() {
     updateDimensions();
 
 
-    /* =====================================================
-       WEIGHT CONVERSION
-    ===================================================== */
-
     const weightInput =
         d.querySelector(".pweight");
 
@@ -520,10 +512,6 @@ function addPackage() {
 
     updateWeight();
 
-
-    /* =====================================================
-       REMOVE
-    ===================================================== */
 
     d.querySelector(
         ".remove"
@@ -815,10 +803,6 @@ function displayStats(
         ) || 0;
 
 
-    /* =====================================================
-       TRUCK
-    ===================================================== */
-
     if (
         container.name === "Truck"
     ) {
@@ -832,10 +816,6 @@ function displayStats(
         return;
     }
 
-
-    /* =====================================================
-       CONESTOGA
-    ===================================================== */
 
     if (
         container.name === "Conestoga"
@@ -857,10 +837,6 @@ function displayStats(
         return;
     }
 
-
-    /* =====================================================
-       CUSTOM
-    ===================================================== */
 
     document.getElementById(
         "stats"
@@ -1114,11 +1090,8 @@ function updateConestogaStats(
             : 100;
 
 
-    let status =
-        "";
-
-    let description =
-        "";
+    let status = "";
+    let description = "";
 
 
     if (
@@ -1171,7 +1144,7 @@ function updateConestogaStats(
             "✅ BALANCED";
 
         description =
-            "Both sides are within the 34,000 lb limit and the load is well balanced.";
+            "Both sections are within the 34,000 lb limit and the load is well balanced.";
     }
 
     else {
@@ -1180,7 +1153,7 @@ function updateConestogaStats(
             "⚠️ UNBALANCED";
 
         description =
-            "Both sides are within the 34,000 lb limit, but the load should be repositioned.";
+            "Both sections are within the 34,000 lb limit, but the load should be repositioned.";
     }
 
 
@@ -1222,27 +1195,13 @@ function updateConestogaStats(
             <hr>
 
 
-            <h3>
-                Side Limit:
-                ${CONESTOGA_SIDE_LIMIT.toLocaleString()} lbs
-            </h3>
-
-
             <div class="weight-row">
 
                 <span>
-                    🔵 Left Side:
+                    🔵 Left Section:
                 </span>
 
-                <strong
-                    style="
-                        color:${
-                            leftExceeded
-                                ? "#dc2626"
-                                : "#15803d"
-                        };
-                    "
-                >
+                <strong>
 
                     ${leftWeight.toLocaleString()}
                     /
@@ -1257,85 +1216,15 @@ function updateConestogaStats(
             <div class="weight-row">
 
                 <span>
-                    Left Remaining:
+                    🟢 Right Section:
                 </span>
 
                 <strong>
-
-                    ${
-                        leftExceeded
-
-                            ? `EXCEEDED BY ${
-                                (
-                                    leftWeight -
-                                    CONESTOGA_SIDE_LIMIT
-                                ).toLocaleString()
-                            } lbs`
-
-                            : `${
-                                (
-                                    CONESTOGA_SIDE_LIMIT -
-                                    leftWeight
-                                ).toLocaleString()
-                            } lbs`
-                    }
-
-                </strong>
-
-            </div>
-
-
-            <div class="weight-row">
-
-                <span>
-                    🟢 Right Side:
-                </span>
-
-                <strong
-                    style="
-                        color:${
-                            rightExceeded
-                                ? "#dc2626"
-                                : "#15803d"
-                        };
-                    "
-                >
 
                     ${rightWeight.toLocaleString()}
                     /
                     ${CONESTOGA_SIDE_LIMIT.toLocaleString()}
                     lbs
-
-                </strong>
-
-            </div>
-
-
-            <div class="weight-row">
-
-                <span>
-                    Right Remaining:
-                </span>
-
-                <strong>
-
-                    ${
-                        rightExceeded
-
-                            ? `EXCEEDED BY ${
-                                (
-                                    rightWeight -
-                                    CONESTOGA_SIDE_LIMIT
-                                ).toLocaleString()
-                            } lbs`
-
-                            : `${
-                                (
-                                    CONESTOGA_SIDE_LIMIT -
-                                    rightWeight
-                                ).toLocaleString()
-                            } lbs`
-                    }
 
                 </strong>
 
@@ -1385,16 +1274,7 @@ function updateConestogaStats(
                 "
             >
 
-                <div
-                    class="balance-title"
-                    style="
-                        ${
-                            limitExceeded
-                                ? "color:#dc2626;"
-                                : ""
-                        }
-                    "
-                >
+                <div class="balance-title">
 
                     ${status}
 
@@ -1408,33 +1288,6 @@ function updateConestogaStats(
                 </div>
 
             </div>
-
-
-            ${
-                limitExceeded
-                    ? `
-
-                        <div
-                            style="
-                                margin-top:15px;
-                                padding:14px;
-                                color:#991b1b;
-                                background:#fee2e2;
-                                border:2px solid #dc2626;
-                                border-radius:6px;
-                                font-weight:bold;
-                            "
-                        >
-
-                            ⚠️ LOAD LIMIT ERROR:
-                            Reduce the overloaded side
-                            below 34,000 lbs.
-
-                        </div>
-
-                    `
-                    : ""
-            }
 
         </div>
     `;
@@ -1453,8 +1306,7 @@ function cleanup3D() {
 
         activeDragCleanup();
 
-        activeDragCleanup =
-            null;
+        activeDragCleanup = null;
     }
 
 
@@ -1466,8 +1318,7 @@ function cleanup3D() {
             animationId
         );
 
-        animationId =
-            null;
+        animationId = null;
     }
 
 
@@ -1477,8 +1328,7 @@ function cleanup3D() {
 
         controls.dispose();
 
-        controls =
-            null;
+        controls = null;
     }
 
 
@@ -1498,16 +1348,12 @@ function cleanup3D() {
         }
 
 
-        renderer =
-            null;
+        renderer = null;
     }
 
 
-    scene =
-        null;
-
-    camera =
-        null;
+    scene = null;
+    camera = null;
 }
 
 
@@ -1526,11 +1372,8 @@ function createWeightLabel(
         );
 
 
-    canvas.width =
-        640;
-
-    canvas.height =
-        160;
+    canvas.width = 640;
+    canvas.height = 160;
 
 
     const context =
@@ -1567,8 +1410,7 @@ function createWeightLabel(
             borderColor;
 
 
-        context.lineWidth =
-            8;
+        context.lineWidth = 8;
 
 
         context.strokeRect(
@@ -1615,14 +1457,11 @@ function createWeightLabel(
     const material =
         new THREE.SpriteMaterial({
 
-            map:
-                texture,
+            map: texture,
 
-            transparent:
-                true,
+            transparent: true,
 
-            depthTest:
-                false
+            depthTest: false
         });
 
 
@@ -1639,8 +1478,7 @@ function createWeightLabel(
     );
 
 
-    sprite.renderOrder =
-        999;
+    sprite.renderOrder = 999;
 
 
     sprite.userData.updateText =
@@ -1648,9 +1486,126 @@ function createWeightLabel(
 
             draw(newText);
 
-            texture.needsUpdate =
-                true;
+            texture.needsUpdate = true;
         };
+
+
+    return sprite;
+}
+
+
+/* =========================================================
+   SIDE LABEL
+========================================================= */
+
+function createSideLabel(
+    text,
+    color
+) {
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width = 500;
+    canvas.height = 120;
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.fillStyle =
+        "rgba(255,255,255,0.92)";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    ctx.strokeStyle =
+        color;
+
+
+    ctx.lineWidth = 7;
+
+
+    ctx.strokeRect(
+        4,
+        4,
+        canvas.width - 8,
+        canvas.height - 8
+    );
+
+
+    ctx.fillStyle =
+        color;
+
+
+    ctx.font =
+        "bold 38px Arial";
+
+
+    ctx.textAlign =
+        "center";
+
+
+    ctx.textBaseline =
+        "middle";
+
+
+    ctx.fillText(
+        text,
+        canvas.width / 2,
+        canvas.height / 2
+    );
+
+
+    const texture =
+        new THREE.CanvasTexture(
+            canvas
+        );
+
+
+    const material =
+        new THREE.SpriteMaterial({
+
+            map: texture,
+
+            transparent: true,
+
+            depthTest: false
+        });
+
+
+    const sprite =
+        new THREE.Sprite(
+            material
+        );
+
+
+    sprite.scale.set(
+        10,
+        2.4,
+        1
+    );
+
+
+    sprite.renderOrder = 998;
 
 
     return sprite;
@@ -1675,8 +1630,7 @@ function render3D(
 
     cleanup3D();
 
-    host.innerHTML =
-        "";
+    host.innerHTML = "";
 
 
     const isConestoga =
@@ -1684,16 +1638,11 @@ function render3D(
         "Conestoga";
 
 
-    const draggableMeshes =
-        [];
+    const draggableMeshes = [];
 
 
-    let leftWeightLabel =
-        null;
-
-
-    let rightWeightLabel =
-        null;
+    let leftWeightLabel = null;
+    let rightWeightLabel = null;
 
 
     /* =====================================================
@@ -1735,8 +1684,7 @@ function render3D(
     renderer =
         new THREE.WebGLRenderer({
 
-            antialias:
-                true
+            antialias: true
         });
 
 
@@ -1755,8 +1703,7 @@ function render3D(
     );
 
 
-    renderer.shadowMap.enabled =
-        true;
+    renderer.shadowMap.enabled = true;
 
 
     renderer.domElement.style.cursor =
@@ -1793,14 +1740,11 @@ function render3D(
 
     directionalLight.position.set(
 
-        container.length *
-        1.5,
+        container.length * 1.5,
 
-        container.height *
-        2,
+        container.height * 2,
 
-        container.width *
-        2
+        container.width * 2
     );
 
 
@@ -1827,17 +1771,13 @@ function render3D(
     const containerMaterial =
         new THREE.MeshBasicMaterial({
 
-            color:
-                0xbac4cc,
+            color: 0xbac4cc,
 
-            transparent:
-                true,
+            transparent: true,
 
-            opacity:
-                0.06,
+            opacity: 0.05,
 
-            side:
-                THREE.DoubleSide
+            side: THREE.DoubleSide
         });
 
 
@@ -1881,8 +1821,8 @@ function render3D(
             containerEdges,
 
             new THREE.LineBasicMaterial({
-                color:
-                    0x111111
+
+                color: 0x111111
             })
         );
 
@@ -1898,7 +1838,7 @@ function render3D(
 
 
     /* =====================================================
-       CONESTOGA LEFT / RIGHT DIVIDER
+       CONESTOGA DIVIDED BY LENGTH
     ===================================================== */
 
     if (
@@ -1917,28 +1857,26 @@ function render3D(
             ) || 0;
 
 
+        /* =================================================
+           LEFT WEIGHT LABEL
+        ================================================= */
+
         leftWeightLabel =
             createWeightLabel(
 
-                `Left: ${
-                    initialLeft
-                        .toLocaleString()
-                } lbs`,
+                `Left: ${initialLeft.toLocaleString()} lbs`,
 
-                "#3b82f6"
+                "#2563eb"
             );
 
 
         leftWeightLabel.position.set(
 
-            container.length *
-            0.35,
+            container.length * 0.25,
 
-            container.height +
-            2.5,
+            container.height + 3,
 
-            container.width *
-            0.15
+            container.width / 2
         );
 
 
@@ -1947,28 +1885,26 @@ function render3D(
         );
 
 
+        /* =================================================
+           RIGHT WEIGHT LABEL
+        ================================================= */
+
         rightWeightLabel =
             createWeightLabel(
 
-                `Right: ${
-                    initialRight
-                        .toLocaleString()
-                } lbs`,
+                `Right: ${initialRight.toLocaleString()} lbs`,
 
-                "#22c55e"
+                "#16a34a"
             );
 
 
         rightWeightLabel.position.set(
 
-            container.length *
-            0.65,
+            container.length * 0.75,
 
-            container.height +
-            2.5,
+            container.height + 3,
 
-            container.width *
-            0.85
+            container.width / 2
         );
 
 
@@ -1977,20 +1913,243 @@ function render3D(
         );
 
 
-        /* CENTER FLOOR LINE */
+        /* =================================================
+           FIRST HALF OF LENGTH - LEFT SECTION
+        ================================================= */
+
+        const leftFloorGeometry =
+            new THREE.PlaneGeometry(
+
+                container.length / 2,
+
+                container.width
+            );
+
+
+        const leftFloorMaterial =
+            new THREE.MeshBasicMaterial({
+
+                color: 0x3b82f6,
+
+                transparent: true,
+
+                opacity: 0.18,
+
+                side: THREE.DoubleSide,
+
+                depthWrite: false
+            });
+
+
+        const leftFloor =
+            new THREE.Mesh(
+
+                leftFloorGeometry,
+
+                leftFloorMaterial
+            );
+
+
+        leftFloor.rotation.x =
+            -Math.PI / 2;
+
+
+        leftFloor.position.set(
+
+            container.length / 4,
+
+            0.025,
+
+            container.width / 2
+        );
+
+
+        scene.add(
+            leftFloor
+        );
+
+
+        /* =================================================
+           SECOND HALF OF LENGTH - RIGHT SECTION
+        ================================================= */
+
+        const rightFloorGeometry =
+            new THREE.PlaneGeometry(
+
+                container.length / 2,
+
+                container.width
+            );
+
+
+        const rightFloorMaterial =
+            new THREE.MeshBasicMaterial({
+
+                color: 0x22c55e,
+
+                transparent: true,
+
+                opacity: 0.18,
+
+                side: THREE.DoubleSide,
+
+                depthWrite: false
+            });
+
+
+        const rightFloor =
+            new THREE.Mesh(
+
+                rightFloorGeometry,
+
+                rightFloorMaterial
+            );
+
+
+        rightFloor.rotation.x =
+            -Math.PI / 2;
+
+
+        rightFloor.position.set(
+
+            container.length * 0.75,
+
+            0.025,
+
+            container.width / 2
+        );
+
+
+        scene.add(
+            rightFloor
+        );
+
+
+        /* =================================================
+           LEFT SECTION LABEL
+        ================================================= */
+
+        const leftSideLabel =
+            createSideLabel(
+                "LEFT SECTION",
+                "#2563eb"
+            );
+
+
+        leftSideLabel.position.set(
+
+            container.length * 0.25,
+
+            1.1,
+
+            container.width / 2
+        );
+
+
+        scene.add(
+            leftSideLabel
+        );
+
+
+        /* =================================================
+           RIGHT SECTION LABEL
+        ================================================= */
+
+        const rightSideLabel =
+            createSideLabel(
+                "RIGHT SECTION",
+                "#16a34a"
+            );
+
+
+        rightSideLabel.position.set(
+
+            container.length * 0.75,
+
+            1.1,
+
+            container.width / 2
+        );
+
+
+        scene.add(
+            rightSideLabel
+        );
+
+
+        /* =================================================
+           CENTER DIVIDER WALL
+           CUTS ACROSS WIDTH AT HALF LENGTH
+        ================================================= */
+
+        const dividerGeometry =
+            new THREE.PlaneGeometry(
+
+                container.width,
+
+                container.height
+            );
+
+
+        const dividerMaterial =
+            new THREE.MeshBasicMaterial({
+
+                color: 0xff0000,
+
+                transparent: true,
+
+                opacity: 0.18,
+
+                side: THREE.DoubleSide,
+
+                depthWrite: false
+            });
+
+
+        const dividerPlane =
+            new THREE.Mesh(
+
+                dividerGeometry,
+
+                dividerMaterial
+            );
+
+
+        dividerPlane.rotation.y =
+            Math.PI / 2;
+
+
+        dividerPlane.position.set(
+
+            container.length / 2,
+
+            container.height / 2,
+
+            container.width / 2
+        );
+
+
+        scene.add(
+            dividerPlane
+        );
+
+
+        /* =================================================
+           RED CENTER LINE ACROSS TRAILER WIDTH
+        ================================================= */
 
         const linePoints = [
 
             new THREE.Vector3(
-                0,
-                0.06,
-                container.width / 2
+                container.length / 2,
+                0.08,
+                0
             ),
 
             new THREE.Vector3(
-                container.length,
-                0.06,
-                container.width / 2
+                container.length / 2,
+                0.08,
+                container.width
             )
         ];
 
@@ -2009,61 +2168,13 @@ function render3D(
 
                 new THREE.LineBasicMaterial({
 
-                    color:
-                        0xff0000
+                    color: 0xff0000
                 })
             );
 
 
         scene.add(
             centerLine
-        );
-
-
-        /* TRANSPARENT DIVIDER WALL */
-
-        const divider =
-            new THREE.Mesh(
-
-                new THREE.PlaneGeometry(
-
-                    container.length,
-
-                    container.height
-                ),
-
-                new THREE.MeshBasicMaterial({
-
-                    color:
-                        0xff0000,
-
-                    transparent:
-                        true,
-
-                    opacity:
-                        0.06,
-
-                    side:
-                        THREE.DoubleSide,
-
-                    depthWrite:
-                        false
-                })
-            );
-
-
-        divider.position.set(
-
-            container.length / 2,
-
-            container.height / 2,
-
-            container.width / 2
-        );
-
-
-        scene.add(
-            divider
         );
     }
 
@@ -2169,8 +2280,7 @@ function render3D(
 
                     new THREE.LineBasicMaterial({
 
-                        color:
-                            0x222222
+                        color: 0x222222
                     })
                 );
 
@@ -2243,8 +2353,7 @@ function render3D(
     const axes =
         new THREE.AxesHelper(
 
-            maxDimension *
-            0.5
+            maxDimension * 0.5
         );
 
 
@@ -2270,8 +2379,7 @@ function render3D(
 
 
     const distance =
-        maxDimension *
-        1.15;
+        maxDimension * 1.15;
 
 
     camera.position.set(
@@ -2340,8 +2448,7 @@ function render3D(
 
 
     /* =====================================================
-       CUSTOM CONESTOGA DRAGGING
-       DRAG ON TRAILER FLOOR
+       CONESTOGA DRAGGING
     ===================================================== */
 
     if (
@@ -2356,6 +2463,26 @@ function render3D(
             camera,
 
             controls,
+
+            draggableMeshes,
+
+            container,
+
+            leftWeightLabel,
+
+            rightWeightLabel
+        );
+
+
+        /*
+            Backend may still calculate its original
+            side values differently.
+
+            Recalculate using the new LENGTH-based
+            split immediately after rendering.
+        */
+
+        updateWeightsFrom3D(
 
             draggableMeshes,
 
@@ -2397,7 +2524,7 @@ function render3D(
 
 
 /* =========================================================
-   CUSTOM CONESTOGA DRAGGING
+   CONESTOGA DRAGGING
 ========================================================= */
 
 function setupConestogaDragging(
@@ -2426,7 +2553,7 @@ function setupConestogaDragging(
         null;
 
 
-    let dragOffset =
+    const dragOffset =
         new THREE.Vector3();
 
 
@@ -2471,7 +2598,9 @@ function setupConestogaDragging(
         }
 
 
-        setPointer(event);
+        setPointer(
+            event
+        );
 
 
         raycaster.setFromCamera(
@@ -2508,14 +2637,6 @@ function setupConestogaDragging(
         canvas.style.cursor =
             "grabbing";
 
-
-        /*
-           Horizontal plane at the
-           center-height of package.
-
-           Pointer movement now maps
-           directly to X/Z trailer floor.
-        */
 
         dragPlane =
             new THREE.Plane(
@@ -2571,7 +2692,9 @@ function setupConestogaDragging(
         }
 
 
-        setPointer(event);
+        setPointer(
+            event
+        );
 
 
         raycaster.setFromCamera(
@@ -2615,7 +2738,7 @@ function setupConestogaDragging(
             2;
 
 
-        /* LENGTH */
+        /* MOVE ALONG TRAILER LENGTH */
 
         selectedMesh.position.x =
             THREE.MathUtils.clamp(
@@ -2629,7 +2752,7 @@ function setupConestogaDragging(
             );
 
 
-        /* WIDTH = LEFT / RIGHT */
+        /* MOVE ACROSS TRAILER WIDTH */
 
         selectedMesh.position.z =
             THREE.MathUtils.clamp(
@@ -2643,11 +2766,13 @@ function setupConestogaDragging(
             );
 
 
-        /* KEEP ON FLOOR */
+        /* KEEP PACKAGE ON FLOOR */
 
         selectedMesh.position.y =
             halfHeight;
 
+
+        /* LIVE UPDATE */
 
         updateWeightsFrom3D(
 
@@ -2763,7 +2888,13 @@ function setupConestogaDragging(
 
 
 /* =========================================================
-   LIVE LEFT / RIGHT CALCULATION
+   LIVE LEFT / RIGHT WEIGHT CALCULATION
+
+   IMPORTANT:
+   X = TRAILER LENGTH
+
+   FIRST HALF OF X = LEFT SECTION
+   SECOND HALF OF X = RIGHT SECTION
 ========================================================= */
 
 function updateWeightsFrom3D(
@@ -2790,19 +2921,8 @@ function updateWeightsFrom3D(
         0;
 
 
-    /*
-       IMPORTANT
-
-       X = trailer length
-       Y = height
-       Z = trailer width
-
-       Therefore Z decides
-       LEFT versus RIGHT.
-    */
-
     const center =
-        container.width /
+        container.length /
         2;
 
 
@@ -2816,8 +2936,14 @@ function updateWeightsFrom3D(
                 ) || 0;
 
 
+            /*
+                PACKAGE CENTER BEFORE
+                HALF OF TRAILER LENGTH
+                = LEFT SECTION
+            */
+
             if (
-                mesh.position.z <
+                mesh.position.x <
                 center
             ) {
 
@@ -2834,7 +2960,7 @@ function updateWeightsFrom3D(
     );
 
 
-    /* UPDATE INFORMATION PANEL */
+    /* UPDATE STATS */
 
     updateConestogaStats(
 
@@ -2846,7 +2972,7 @@ function updateWeightsFrom3D(
     );
 
 
-    /* UPDATE 3D LEFT LABEL */
+    /* UPDATE LEFT LABEL */
 
     if (
         leftLabel &&
@@ -2863,7 +2989,7 @@ function updateWeightsFrom3D(
     }
 
 
-    /* UPDATE 3D RIGHT LABEL */
+    /* UPDATE RIGHT LABEL */
 
     if (
         rightLabel &&
