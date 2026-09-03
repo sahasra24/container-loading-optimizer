@@ -8,7 +8,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 let pkgCount = 0;
 
-const packages = document.getElementById("packages");
+const packages =
+    document.getElementById("packages");
 
 let renderer = null;
 let scene = null;
@@ -16,19 +17,35 @@ let camera = null;
 let controls = null;
 let animationId = null;
 
+let activeDragCleanup = null;
+
+const CONESTOGA_SIDE_LIMIT = 34000;
+
 
 /* =========================================================
    CONTAINER ELEMENTS
 ========================================================= */
 
-const containerName = document.getElementById("cname");
-const containerLength = document.getElementById("cl");
-const containerWidth = document.getElementById("cw");
-const containerHeight = document.getElementById("ch");
+const containerName =
+    document.getElementById("cname");
 
-const lengthMM = document.getElementById("lengthMM");
-const widthMM = document.getElementById("widthMM");
-const heightMM = document.getElementById("heightMM");
+const containerLength =
+    document.getElementById("cl");
+
+const containerWidth =
+    document.getElementById("cw");
+
+const containerHeight =
+    document.getElementById("ch");
+
+const lengthMM =
+    document.getElementById("lengthMM");
+
+const widthMM =
+    document.getElementById("widthMM");
+
+const heightMM =
+    document.getElementById("heightMM");
 
 
 /* =========================================================
@@ -42,33 +59,46 @@ function feetToMM(feet) {
 
 function updateMMValues() {
 
-    const l = Number(containerLength.value);
-    const w = Number(containerWidth.value);
-    const h = Number(containerHeight.value);
+    const l =
+        Number(containerLength.value);
+
+    const w =
+        Number(containerWidth.value);
+
+    const h =
+        Number(containerHeight.value);
+
 
     lengthMM.textContent =
-        l ? `${Math.round(feetToMM(l))} mm` : "";
+        l
+            ? `${Math.round(feetToMM(l))} mm`
+            : "";
 
     widthMM.textContent =
-        w ? `${Math.round(feetToMM(w))} mm` : "";
+        w
+            ? `${Math.round(feetToMM(w))} mm`
+            : "";
 
     heightMM.textContent =
-        h ? `${Math.round(feetToMM(h))} mm` : "";
+        h
+            ? `${Math.round(feetToMM(h))} mm`
+            : "";
 }
 
 
 /* =========================================================
-   CONTAINER TYPE SELECTION
+   CONTAINER TYPE
 ========================================================= */
 
 function updateContainer() {
 
-    const selected = containerName.value;
+    const selected =
+        containerName.value;
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        TRUCK
-    ----------------------------------------------------- */
+    ===================================================== */
 
     if (selected === "Truck") {
 
@@ -89,9 +119,14 @@ function updateContainer() {
         containerHeight.removeAttribute("min");
         containerHeight.removeAttribute("max");
 
-        containerLength.style.backgroundColor = "#eeeeee";
-        containerWidth.style.backgroundColor = "#eeeeee";
-        containerHeight.style.backgroundColor = "#eeeeee";
+        containerLength.style.backgroundColor =
+            "#eeeeee";
+
+        containerWidth.style.backgroundColor =
+            "#eeeeee";
+
+        containerHeight.style.backgroundColor =
+            "#eeeeee";
 
         updateMMValues();
 
@@ -99,9 +134,9 @@ function updateContainer() {
     }
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        CONESTOGA
-    ----------------------------------------------------- */
+    ===================================================== */
 
     if (selected === "Conestoga") {
 
@@ -113,14 +148,19 @@ function updateContainer() {
         containerLength.readOnly = false;
 
         containerWidth.value = 8.6;
-        containerWidth.readOnly = true;
-
         containerHeight.value = 6.6;
+
+        containerWidth.readOnly = true;
         containerHeight.readOnly = true;
 
-        containerLength.style.backgroundColor = "#ffffff";
-        containerWidth.style.backgroundColor = "#eeeeee";
-        containerHeight.style.backgroundColor = "#eeeeee";
+        containerLength.style.backgroundColor =
+            "#ffffff";
+
+        containerWidth.style.backgroundColor =
+            "#eeeeee";
+
+        containerHeight.style.backgroundColor =
+            "#eeeeee";
 
         updateMMValues();
 
@@ -128,9 +168,9 @@ function updateContainer() {
     }
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        CUSTOM
-    ----------------------------------------------------- */
+    ===================================================== */
 
     if (selected === "Custom") {
 
@@ -151,13 +191,16 @@ function updateContainer() {
         containerHeight.removeAttribute("min");
         containerHeight.removeAttribute("max");
 
-        containerLength.style.backgroundColor = "#ffffff";
-        containerWidth.style.backgroundColor = "#ffffff";
-        containerHeight.style.backgroundColor = "#ffffff";
+        containerLength.style.backgroundColor =
+            "#ffffff";
+
+        containerWidth.style.backgroundColor =
+            "#ffffff";
+
+        containerHeight.style.backgroundColor =
+            "#ffffff";
 
         updateMMValues();
-
-        return;
     }
 }
 
@@ -186,9 +229,6 @@ containerHeight.addEventListener(
     updateMMValues
 );
 
-
-/* Load Truck by default */
-
 updateContainer();
 
 
@@ -200,9 +240,11 @@ function addPackage() {
 
     pkgCount++;
 
-    const d = document.createElement("div");
+    const d =
+        document.createElement("div");
 
-    d.className = "package";
+    d.className =
+        "package";
 
 
     const colors = [
@@ -318,7 +360,12 @@ function addPackage() {
                 <input
                     class="pcolor"
                     type="color"
-                    value="${colors[(pkgCount - 1) % colors.length]}"
+                    value="${
+                        colors[
+                            (pkgCount - 1) %
+                            colors.length
+                        ]
+                    }"
                 >
             </label>
 
@@ -371,79 +418,78 @@ function addPackage() {
 
 
     /* =====================================================
-       PACKAGE DIMENSION CONVERSION
-       FT -> MM
+       DIMENSION CONVERSION
     ===================================================== */
 
-    const packageLengthInput =
+    const lengthInput =
         d.querySelector(".pl");
 
-    const packageWidthInput =
+    const widthInput =
         d.querySelector(".pw");
 
-    const packageHeightInput =
+    const heightInput =
         d.querySelector(".ph");
 
 
-    const packageLengthMM =
-        d.querySelector(".packageLengthMM");
+    const lengthDisplay =
+        d.querySelector(
+            ".packageLengthMM"
+        );
 
-    const packageWidthMM =
-        d.querySelector(".packageWidthMM");
+    const widthDisplay =
+        d.querySelector(
+            ".packageWidthMM"
+        );
 
-    const packageHeightMM =
-        d.querySelector(".packageHeightMM");
-
-
-    function updatePackageDimensionsMM() {
-
-        const lengthFt =
-            Number(packageLengthInput.value) || 0;
-
-        const widthFt =
-            Number(packageWidthInput.value) || 0;
-
-        const heightFt =
-            Number(packageHeightInput.value) || 0;
+    const heightDisplay =
+        d.querySelector(
+            ".packageHeightMM"
+        );
 
 
-        packageLengthMM.textContent =
-            `${feetToMM(lengthFt).toFixed(1)} mm`;
+    function updateDimensions() {
+
+        const l =
+            Number(lengthInput.value) || 0;
+
+        const w =
+            Number(widthInput.value) || 0;
+
+        const h =
+            Number(heightInput.value) || 0;
 
 
-        packageWidthMM.textContent =
-            `${feetToMM(widthFt).toFixed(1)} mm`;
+        lengthDisplay.textContent =
+            `${feetToMM(l).toFixed(1)} mm`;
 
+        widthDisplay.textContent =
+            `${feetToMM(w).toFixed(1)} mm`;
 
-        packageHeightMM.textContent =
-            `${feetToMM(heightFt).toFixed(1)} mm`;
+        heightDisplay.textContent =
+            `${feetToMM(h).toFixed(1)} mm`;
     }
 
 
-    packageLengthInput.addEventListener(
+    lengthInput.addEventListener(
         "input",
-        updatePackageDimensionsMM
+        updateDimensions
     );
 
-
-    packageWidthInput.addEventListener(
+    widthInput.addEventListener(
         "input",
-        updatePackageDimensionsMM
+        updateDimensions
     );
 
-
-    packageHeightInput.addEventListener(
+    heightInput.addEventListener(
         "input",
-        updatePackageDimensionsMM
+        updateDimensions
     );
 
-
-    updatePackageDimensionsMM();
+    updateDimensions();
 
 
     /* =====================================================
-       PACKAGE WEIGHT CONVERSION
-       LBS -> KG
+       WEIGHT CONVERSION
     ===================================================== */
 
     const weightInput =
@@ -453,7 +499,7 @@ function addPackage() {
         d.querySelector(".weightKg");
 
 
-    function updatePackageWeightKg() {
+    function updateWeight() {
 
         const lbs =
             Number(weightInput.value) || 0;
@@ -469,21 +515,21 @@ function addPackage() {
 
     weightInput.addEventListener(
         "input",
-        updatePackageWeightKg
+        updateWeight
     );
 
-
-    updatePackageWeightKg();
+    updateWeight();
 
 
     /* =====================================================
-       REMOVE PACKAGE
+       REMOVE
     ===================================================== */
 
-    d.querySelector(".remove").onclick = () => {
+    d.querySelector(
+        ".remove"
+    ).onclick = () => {
 
         d.remove();
-
     };
 }
 
@@ -492,17 +538,16 @@ function addPackage() {
    ADD PACKAGE BUTTON
 ========================================================= */
 
-document.getElementById("add").onclick =
+document.getElementById(
+    "add"
+).onclick =
     addPackage;
-
-
-/* First package automatically */
 
 addPackage();
 
 
 /* =========================================================
-   GET NUMBER
+   HELPERS
 ========================================================= */
 
 function getNumber(id) {
@@ -520,7 +565,9 @@ function getNumber(id) {
 function collect() {
 
     const packageElements =
-        document.querySelectorAll(".package");
+        document.querySelectorAll(
+            ".package"
+        );
 
 
     const packageData =
@@ -529,54 +576,62 @@ function collect() {
             p => ({
 
                 name:
-                    p.querySelector(".pname").value,
-
+                    p.querySelector(
+                        ".pname"
+                    ).value,
 
                 length:
                     Number(
-                        p.querySelector(".pl").value
+                        p.querySelector(
+                            ".pl"
+                        ).value
                     ),
-
 
                 width:
                     Number(
-                        p.querySelector(".pw").value
+                        p.querySelector(
+                            ".pw"
+                        ).value
                     ),
-
 
                 height:
                     Number(
-                        p.querySelector(".ph").value
+                        p.querySelector(
+                            ".ph"
+                        ).value
                     ),
-
 
                 amount:
                     Number(
-                        p.querySelector(".pa").value
+                        p.querySelector(
+                            ".pa"
+                        ).value
                     ),
-
 
                 weight:
                     Number(
-                        p.querySelector(".pweight").value
+                        p.querySelector(
+                            ".pweight"
+                        ).value
                     ),
 
-
                 color:
-                    p.querySelector(".pcolor").value,
-
+                    p.querySelector(
+                        ".pcolor"
+                    ).value,
 
                 importance:
                     Number(
-                        p.querySelector(".pimportance").value
+                        p.querySelector(
+                            ".pimportance"
+                        ).value
                     ),
 
-
                 auto_rotate:
-                    p.querySelector(".protate").value === "true"
-
+                    p.querySelector(
+                        ".protate"
+                    ).value === "true"
             })
-
         );
 
 
@@ -585,26 +640,22 @@ function collect() {
         container: {
 
             name:
-                document.getElementById("cname").value,
-
+                document.getElementById(
+                    "cname"
+                ).value,
 
             length:
                 getNumber("cl"),
 
-
             width:
                 getNumber("cw"),
-
 
             height:
                 getNumber("ch"),
 
-
             max_weight:
                 getNumber("cweight")
-
         },
-
 
         packages:
             packageData
@@ -613,26 +664,21 @@ function collect() {
 
 
 /* =========================================================
-   GENERATE PACKING
+   GENERATE
 ========================================================= */
 
 document.getElementById(
     "generate"
 ).onclick = async () => {
 
-
     const data =
         collect();
 
 
     if (
-
         data.container.length <= 0 ||
-
         data.container.width <= 0 ||
-
         data.container.height <= 0
-
     ) {
 
         alert(
@@ -644,15 +690,12 @@ document.getElementById(
 
 
     if (
-
-        data.container.name === "Conestoga" &&
-
+        data.container.name ===
+            "Conestoga" &&
         (
             data.container.length < 48 ||
-
             data.container.length > 53
         )
-
     ) {
 
         alert(
@@ -680,17 +723,11 @@ document.getElementById(
     ) {
 
         if (
-
             p.length <= 0 ||
-
             p.width <= 0 ||
-
             p.height <= 0 ||
-
             p.amount <= 0 ||
-
             p.weight < 0
-
         ) {
 
             alert(
@@ -706,11 +743,8 @@ document.getElementById(
 
         const response =
             await fetch(
-
                 "/api/pack",
-
                 {
-
                     method:
                         "POST",
 
@@ -718,14 +752,11 @@ document.getElementById(
 
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
                         JSON.stringify(data)
-
                 }
-
             );
 
 
@@ -746,13 +777,15 @@ document.getElementById(
 
 
         displayStats(
-            output.stats
+            output.stats,
+            data.container
         );
 
 
         render3D(
             data.container,
-            output.placed
+            output.placed,
+            output.stats
         );
 
 
@@ -768,25 +801,76 @@ document.getElementById(
 
 
 /* =========================================================
-   PACKING INFORMATION
+   STATS
 ========================================================= */
 
-function displayStats(s) {
+function displayStats(
+    statsData,
+    container
+) {
 
-    const stats =
-        document.getElementById(
-            "stats"
+    const packedWeight =
+        Number(
+            statsData.packed_weight
+        ) || 0;
+
+
+    /* =====================================================
+       TRUCK
+    ===================================================== */
+
+    if (
+        container.name === "Truck"
+    ) {
+
+        displayTruckStats(
+            statsData,
+            container,
+            packedWeight
         );
 
+        return;
+    }
 
-    stats.innerHTML = `
+
+    /* =====================================================
+       CONESTOGA
+    ===================================================== */
+
+    if (
+        container.name === "Conestoga"
+    ) {
+
+        updateConestogaStats(
+
+            Number(
+                statsData.left_weight
+            ) || 0,
+
+            Number(
+                statsData.right_weight
+            ) || 0,
+
+            statsData.packed_items
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       CUSTOM
+    ===================================================== */
+
+    document.getElementById(
+        "stats"
+    ).innerHTML = `
 
         <div class="packing-card">
 
             <h2>
                 Packing Information
             </h2>
-
 
             <div class="summary-row">
 
@@ -795,7 +879,7 @@ function displayStats(s) {
                 </span>
 
                 <strong>
-                    ${s.packed_items}
+                    ${statsData.packed_items}
                 </strong>
 
             </div>
@@ -808,9 +892,328 @@ function displayStats(s) {
                 </span>
 
                 <strong>
-                    ${Number(
-                        s.packed_weight
-                    ).toLocaleString()} lbs
+                    ${packedWeight.toLocaleString()} lbs
+                </strong>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   TRUCK STATS
+========================================================= */
+
+function displayTruckStats(
+    statsData,
+    container,
+    packedWeight
+) {
+
+    const stats =
+        document.getElementById(
+            "stats"
+        );
+
+
+    const maxWeight =
+        Number(
+            container.max_weight
+        ) || 0;
+
+
+    const remaining =
+        Math.max(
+            0,
+            maxWeight - packedWeight
+        );
+
+
+    const exceeded =
+        packedWeight >
+        maxWeight;
+
+
+    stats.innerHTML = `
+
+        <div class="packing-card">
+
+            <h2>
+                Truck Packing Information
+            </h2>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Packed Items:
+                </span>
+
+                <strong>
+                    ${statsData.packed_items}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Total Packed Weight:
+                </span>
+
+                <strong>
+                    ${packedWeight.toLocaleString()} lbs
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Maximum Capacity:
+                </span>
+
+                <strong>
+                    ${maxWeight.toLocaleString()} lbs
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Remaining Capacity:
+                </span>
+
+                <strong>
+                    ${remaining.toLocaleString()} lbs
+                </strong>
+
+            </div>
+
+
+            ${
+                exceeded
+                    ? `
+
+                        <div
+                            class="balance-box"
+                            style="
+                                background:#fef2f2;
+                                border-color:#dc2626;
+                            "
+                        >
+
+                            <div
+                                class="balance-title"
+                                style="color:#dc2626;"
+                            >
+                                ❌ Weight Capacity Exceeded
+                            </div>
+
+
+                            <div class="balance-description">
+
+                                Truck exceeds its maximum
+                                weight by
+
+                                <strong>
+
+                                    ${
+                                        (
+                                            packedWeight -
+                                            maxWeight
+                                        ).toLocaleString()
+                                    } lbs
+
+                                </strong>.
+
+                            </div>
+
+                        </div>
+
+                    `
+                    : `
+
+                        <div class="balance-box">
+
+                            <div class="balance-title">
+                                ✅ Within Weight Capacity
+                            </div>
+
+                        </div>
+
+                    `
+            }
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   CONESTOGA STATS
+========================================================= */
+
+function updateConestogaStats(
+    leftWeight,
+    rightWeight,
+    packedItems
+) {
+
+    const stats =
+        document.getElementById(
+            "stats"
+        );
+
+
+    const leftExceeded =
+        leftWeight >
+        CONESTOGA_SIDE_LIMIT;
+
+
+    const rightExceeded =
+        rightWeight >
+        CONESTOGA_SIDE_LIMIT;
+
+
+    const limitExceeded =
+        leftExceeded ||
+        rightExceeded;
+
+
+    const totalWeight =
+        leftWeight +
+        rightWeight;
+
+
+    const difference =
+        Math.abs(
+            leftWeight -
+            rightWeight
+        );
+
+
+    const balance =
+        totalWeight > 0
+
+            ? Math.max(
+                0,
+                (
+                    1 -
+                    difference /
+                    totalWeight
+                ) * 100
+            )
+
+            : 100;
+
+
+    let status =
+        "";
+
+    let description =
+        "";
+
+
+    if (
+        limitExceeded
+    ) {
+
+        status =
+            "❌ UNBALANCED — WEIGHT LIMIT EXCEEDED";
+
+
+        if (
+            leftExceeded &&
+            rightExceeded
+        ) {
+
+            description =
+                "Both sides exceed the 34,000 lb limit. Unload or reposition packages.";
+        }
+
+        else if (
+            leftExceeded
+        ) {
+
+            description =
+                `Left side exceeds the limit by ${
+                    (
+                        leftWeight -
+                        CONESTOGA_SIDE_LIMIT
+                    ).toLocaleString()
+                } lbs.`;
+        }
+
+        else {
+
+            description =
+                `Right side exceeds the limit by ${
+                    (
+                        rightWeight -
+                        CONESTOGA_SIDE_LIMIT
+                    ).toLocaleString()
+                } lbs.`;
+        }
+    }
+
+    else if (
+        balance >= 95
+    ) {
+
+        status =
+            "✅ BALANCED";
+
+        description =
+            "Both sides are within the 34,000 lb limit and the load is well balanced.";
+    }
+
+    else {
+
+        status =
+            "⚠️ UNBALANCED";
+
+        description =
+            "Both sides are within the 34,000 lb limit, but the load should be repositioned.";
+    }
+
+
+    stats.innerHTML = `
+
+        <div class="packing-card">
+
+            <h2>
+                Conestoga Weight Distribution
+            </h2>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Packed Items:
+                </span>
+
+                <strong>
+                    ${packedItems}
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    Total Weight:
+                </span>
+
+                <strong>
+                    ${totalWeight.toLocaleString()} lbs
                 </strong>
 
             </div>
@@ -820,7 +1223,8 @@ function displayStats(s) {
 
 
             <h3>
-                Weight Distribution
+                Side Limit:
+                ${CONESTOGA_SIDE_LIMIT.toLocaleString()} lbs
             </h3>
 
 
@@ -830,10 +1234,52 @@ function displayStats(s) {
                     🔵 Left Side:
                 </span>
 
+                <strong
+                    style="
+                        color:${
+                            leftExceeded
+                                ? "#dc2626"
+                                : "#15803d"
+                        };
+                    "
+                >
+
+                    ${leftWeight.toLocaleString()}
+                    /
+                    ${CONESTOGA_SIDE_LIMIT.toLocaleString()}
+                    lbs
+
+                </strong>
+
+            </div>
+
+
+            <div class="weight-row">
+
+                <span>
+                    Left Remaining:
+                </span>
+
                 <strong>
-                    ${Number(
-                        s.left_weight
-                    ).toLocaleString()} lbs
+
+                    ${
+                        leftExceeded
+
+                            ? `EXCEEDED BY ${
+                                (
+                                    leftWeight -
+                                    CONESTOGA_SIDE_LIMIT
+                                ).toLocaleString()
+                            } lbs`
+
+                            : `${
+                                (
+                                    CONESTOGA_SIDE_LIMIT -
+                                    leftWeight
+                                ).toLocaleString()
+                            } lbs`
+                    }
+
                 </strong>
 
             </div>
@@ -845,10 +1291,21 @@ function displayStats(s) {
                     🟢 Right Side:
                 </span>
 
-                <strong>
-                    ${Number(
-                        s.right_weight
-                    ).toLocaleString()} lbs
+                <strong
+                    style="
+                        color:${
+                            rightExceeded
+                                ? "#dc2626"
+                                : "#15803d"
+                        };
+                    "
+                >
+
+                    ${rightWeight.toLocaleString()}
+                    /
+                    ${CONESTOGA_SIDE_LIMIT.toLocaleString()}
+                    lbs
+
                 </strong>
 
             </div>
@@ -857,13 +1314,45 @@ function displayStats(s) {
             <div class="weight-row">
 
                 <span>
-                    🟣 Difference:
+                    Right Remaining:
                 </span>
 
                 <strong>
-                    ${Number(
-                        s.weight_difference
-                    ).toLocaleString()} lbs
+
+                    ${
+                        rightExceeded
+
+                            ? `EXCEEDED BY ${
+                                (
+                                    rightWeight -
+                                    CONESTOGA_SIDE_LIMIT
+                                ).toLocaleString()
+                            } lbs`
+
+                            : `${
+                                (
+                                    CONESTOGA_SIDE_LIMIT -
+                                    rightWeight
+                                ).toLocaleString()
+                            } lbs`
+                    }
+
+                </strong>
+
+            </div>
+
+
+            <hr>
+
+
+            <div class="weight-row">
+
+                <span>
+                    Difference:
+                </span>
+
+                <strong>
+                    ${difference.toLocaleString()} lbs
                 </strong>
 
             </div>
@@ -876,48 +1365,76 @@ function displayStats(s) {
                 </span>
 
                 <strong>
-                    ${s.balance_percentage}%
+                    ${balance.toFixed(1)}%
                 </strong>
 
             </div>
 
 
-            <div class="balance-box">
-
-                <div class="balance-title">
-
+            <div
+                class="balance-box"
+                style="
                     ${
-                        s.balance_percentage >= 95
-
-                            ? "✅ Well Balanced"
-
-                            : s.balance_percentage >= 85
-
-                            ? "⚠️ Moderately Balanced"
-
-                            : "❌ Unbalanced"
+                        limitExceeded
+                            ? `
+                                background:#fef2f2;
+                                border-color:#dc2626;
+                            `
+                            : ""
                     }
+                "
+            >
+
+                <div
+                    class="balance-title"
+                    style="
+                        ${
+                            limitExceeded
+                                ? "color:#dc2626;"
+                                : ""
+                        }
+                    "
+                >
+
+                    ${status}
 
                 </div>
 
 
                 <div class="balance-description">
 
-                    ${
-                        s.balance_percentage >= 95
-
-                            ? "The difference between left and right side weights is within acceptable limits."
-
-                            : s.balance_percentage >= 85
-
-                            ? "The load has some imbalance between the left and right sides."
-
-                            : "The left and right side weights are significantly unbalanced."
-                    }
+                    ${description}
 
                 </div>
 
             </div>
+
+
+            ${
+                limitExceeded
+                    ? `
+
+                        <div
+                            style="
+                                margin-top:15px;
+                                padding:14px;
+                                color:#991b1b;
+                                background:#fee2e2;
+                                border:2px solid #dc2626;
+                                border-radius:6px;
+                                font-weight:bold;
+                            "
+                        >
+
+                            ⚠️ LOAD LIMIT ERROR:
+                            Reduce the overloaded side
+                            below 34,000 lbs.
+
+                        </div>
+
+                    `
+                    : ""
+            }
 
         </div>
     `;
@@ -925,10 +1442,21 @@ function displayStats(s) {
 
 
 /* =========================================================
-   CLEAN 3D
+   CLEANUP 3D
 ========================================================= */
 
 function cleanup3D() {
+
+    if (
+        activeDragCleanup
+    ) {
+
+        activeDragCleanup();
+
+        activeDragCleanup =
+            null;
+    }
+
 
     if (
         animationId
@@ -938,7 +1466,8 @@ function cleanup3D() {
             animationId
         );
 
-        animationId = null;
+        animationId =
+            null;
     }
 
 
@@ -948,7 +1477,8 @@ function cleanup3D() {
 
         controls.dispose();
 
-        controls = null;
+        controls =
+            null;
     }
 
 
@@ -965,27 +1495,176 @@ function cleanup3D() {
         ) {
 
             renderer.domElement.remove();
-
         }
 
 
-        renderer = null;
+        renderer =
+            null;
     }
 
 
-    scene = null;
+    scene =
+        null;
 
-    camera = null;
+    camera =
+        null;
 }
 
 
 /* =========================================================
-   3D CONTAINER
+   DYNAMIC WEIGHT LABEL
+========================================================= */
+
+function createWeightLabel(
+    text,
+    borderColor
+) {
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        640;
+
+    canvas.height =
+        160;
+
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    function draw(
+        newText
+    ) {
+
+        context.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        context.fillStyle =
+            "rgba(255,255,255,0.95)";
+
+
+        context.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+
+        context.strokeStyle =
+            borderColor;
+
+
+        context.lineWidth =
+            8;
+
+
+        context.strokeRect(
+            4,
+            4,
+            canvas.width - 8,
+            canvas.height - 8
+        );
+
+
+        context.font =
+            "bold 42px Arial";
+
+
+        context.fillStyle =
+            "#111111";
+
+
+        context.textAlign =
+            "center";
+
+
+        context.textBaseline =
+            "middle";
+
+
+        context.fillText(
+            newText,
+            canvas.width / 2,
+            canvas.height / 2
+        );
+    }
+
+
+    draw(text);
+
+
+    const texture =
+        new THREE.CanvasTexture(
+            canvas
+        );
+
+
+    const material =
+        new THREE.SpriteMaterial({
+
+            map:
+                texture,
+
+            transparent:
+                true,
+
+            depthTest:
+                false
+        });
+
+
+    const sprite =
+        new THREE.Sprite(
+            material
+        );
+
+
+    sprite.scale.set(
+        13,
+        3.25,
+        1
+    );
+
+
+    sprite.renderOrder =
+        999;
+
+
+    sprite.userData.updateText =
+        newText => {
+
+            draw(newText);
+
+            texture.needsUpdate =
+                true;
+        };
+
+
+    return sprite;
+}
+
+
+/* =========================================================
+   RENDER 3D
 ========================================================= */
 
 function render3D(
     container,
-    boxes
+    boxes,
+    statsData
 ) {
 
     const host =
@@ -996,12 +1675,30 @@ function render3D(
 
     cleanup3D();
 
-    host.innerHTML = "";
+    host.innerHTML =
+        "";
 
 
-    /* -----------------------------------------------------
+    const isConestoga =
+        container.name ===
+        "Conestoga";
+
+
+    const draggableMeshes =
+        [];
+
+
+    let leftWeightLabel =
+        null;
+
+
+    let rightWeightLabel =
+        null;
+
+
+    /* =====================================================
        SCENE
-    ----------------------------------------------------- */
+    ===================================================== */
 
     scene =
         new THREE.Scene();
@@ -1013,9 +1710,9 @@ function render3D(
         );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        CAMERA
-    ----------------------------------------------------- */
+    ===================================================== */
 
     camera =
         new THREE.PerspectiveCamera(
@@ -1028,20 +1725,18 @@ function render3D(
             0.1,
 
             10000
-
         );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        RENDERER
-    ----------------------------------------------------- */
+    ===================================================== */
 
     renderer =
         new THREE.WebGLRenderer({
 
             antialias:
                 true
-
         });
 
 
@@ -1051,16 +1746,12 @@ function render3D(
             window.devicePixelRatio,
             2
         )
-
     );
 
 
     renderer.setSize(
-
         host.clientWidth,
-
         host.clientHeight
-
     );
 
 
@@ -1068,22 +1759,23 @@ function render3D(
         true;
 
 
+    renderer.domElement.style.cursor =
+        "grab";
+
+
     host.appendChild(
         renderer.domElement
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        LIGHTS
-    ----------------------------------------------------- */
+    ===================================================== */
 
     const ambientLight =
         new THREE.AmbientLight(
-
             0xffffff,
-
             1.5
-
         );
 
 
@@ -1094,27 +1786,22 @@ function render3D(
 
     const directionalLight =
         new THREE.DirectionalLight(
-
             0xffffff,
-
             2
-
         );
 
 
     directionalLight.position.set(
 
-        container.length * 1.5,
+        container.length *
+        1.5,
 
-        container.height * 2,
+        container.height *
+        2,
 
-        container.width * 2
-
+        container.width *
+        2
     );
-
-
-    directionalLight.castShadow =
-        true;
 
 
     scene.add(
@@ -1122,9 +1809,9 @@ function render3D(
     );
 
 
-    /* -----------------------------------------------------
-       CONTAINER GEOMETRY
-    ----------------------------------------------------- */
+    /* =====================================================
+       CONTAINER
+    ===================================================== */
 
     const containerGeometry =
         new THREE.BoxGeometry(
@@ -1134,7 +1821,6 @@ function render3D(
             container.height,
 
             container.width
-
         );
 
 
@@ -1148,11 +1834,10 @@ function render3D(
                 true,
 
             opacity:
-                0.08,
+                0.06,
 
             side:
                 THREE.DoubleSide
-
         });
 
 
@@ -1162,7 +1847,6 @@ function render3D(
             containerGeometry,
 
             containerMaterial
-
         );
 
 
@@ -1173,7 +1857,6 @@ function render3D(
         container.height / 2,
 
         container.width / 2
-
     );
 
 
@@ -1182,9 +1865,9 @@ function render3D(
     );
 
 
-    /* -----------------------------------------------------
-       CONTAINER EDGES
-    ----------------------------------------------------- */
+    /* =====================================================
+       CONTAINER OUTLINE
+    ===================================================== */
 
     const containerEdges =
         new THREE.EdgesGeometry(
@@ -1192,38 +1875,202 @@ function render3D(
         );
 
 
-    const containerEdgeMaterial =
-        new THREE.LineBasicMaterial({
-
-            color:
-                0x111111
-
-        });
-
-
-    const containerOutline =
+    const outline =
         new THREE.LineSegments(
 
             containerEdges,
 
-            containerEdgeMaterial
-
+            new THREE.LineBasicMaterial({
+                color:
+                    0x111111
+            })
         );
 
 
-    containerOutline.position.copy(
+    outline.position.copy(
         containerMesh.position
     );
 
 
     scene.add(
-        containerOutline
+        outline
     );
 
 
-    /* -----------------------------------------------------
-       PACKED BOXES
-    ----------------------------------------------------- */
+    /* =====================================================
+       CONESTOGA LEFT / RIGHT DIVIDER
+    ===================================================== */
+
+    if (
+        isConestoga
+    ) {
+
+        const initialLeft =
+            Number(
+                statsData.left_weight
+            ) || 0;
+
+
+        const initialRight =
+            Number(
+                statsData.right_weight
+            ) || 0;
+
+
+        leftWeightLabel =
+            createWeightLabel(
+
+                `Left: ${
+                    initialLeft
+                        .toLocaleString()
+                } lbs`,
+
+                "#3b82f6"
+            );
+
+
+        leftWeightLabel.position.set(
+
+            container.length *
+            0.35,
+
+            container.height +
+            2.5,
+
+            container.width *
+            0.15
+        );
+
+
+        scene.add(
+            leftWeightLabel
+        );
+
+
+        rightWeightLabel =
+            createWeightLabel(
+
+                `Right: ${
+                    initialRight
+                        .toLocaleString()
+                } lbs`,
+
+                "#22c55e"
+            );
+
+
+        rightWeightLabel.position.set(
+
+            container.length *
+            0.65,
+
+            container.height +
+            2.5,
+
+            container.width *
+            0.85
+        );
+
+
+        scene.add(
+            rightWeightLabel
+        );
+
+
+        /* CENTER FLOOR LINE */
+
+        const linePoints = [
+
+            new THREE.Vector3(
+                0,
+                0.06,
+                container.width / 2
+            ),
+
+            new THREE.Vector3(
+                container.length,
+                0.06,
+                container.width / 2
+            )
+        ];
+
+
+        const lineGeometry =
+            new THREE.BufferGeometry()
+                .setFromPoints(
+                    linePoints
+                );
+
+
+        const centerLine =
+            new THREE.Line(
+
+                lineGeometry,
+
+                new THREE.LineBasicMaterial({
+
+                    color:
+                        0xff0000
+                })
+            );
+
+
+        scene.add(
+            centerLine
+        );
+
+
+        /* TRANSPARENT DIVIDER WALL */
+
+        const divider =
+            new THREE.Mesh(
+
+                new THREE.PlaneGeometry(
+
+                    container.length,
+
+                    container.height
+                ),
+
+                new THREE.MeshBasicMaterial({
+
+                    color:
+                        0xff0000,
+
+                    transparent:
+                        true,
+
+                    opacity:
+                        0.06,
+
+                    side:
+                        THREE.DoubleSide,
+
+                    depthWrite:
+                        false
+                })
+            );
+
+
+        divider.position.set(
+
+            container.length / 2,
+
+            container.height / 2,
+
+            container.width / 2
+        );
+
+
+        scene.add(
+            divider
+        );
+    }
+
+
+    /* =====================================================
+       PACKAGES
+    ===================================================== */
 
     boxes.forEach(
 
@@ -1237,7 +2084,6 @@ function render3D(
                     box.height,
 
                     box.width
-
                 );
 
 
@@ -1251,8 +2097,7 @@ function render3D(
                         true,
 
                     opacity:
-                        0.88
-
+                        0.9
                 });
 
 
@@ -1262,7 +2107,6 @@ function render3D(
                     geometry,
 
                     material
-
                 );
 
 
@@ -1276,32 +2120,40 @@ function render3D(
 
                 box.y +
                 box.width / 2
-
             );
 
 
-            mesh.castShadow =
-                true;
-
-
-            mesh.receiveShadow =
-                true;
-
-
             mesh.userData = {
+
+                packageMesh:
+                    true,
 
                 name:
                     box.name,
 
                 index:
-                    index + 1
+                    index + 1,
 
+                weight:
+                    Number(
+                        box.weight
+                    ) || 0,
+
+                length:
+                    Number(
+                        box.length
+                    ) || 0,
+
+                width:
+                    Number(
+                        box.width
+                    ) || 0,
+
+                height:
+                    Number(
+                        box.height
+                    ) || 0
             };
-
-
-            scene.add(
-                mesh
-            );
 
 
             const edges =
@@ -1310,42 +2162,44 @@ function render3D(
                 );
 
 
-            const edgeMaterial =
-                new THREE.LineBasicMaterial({
-
-                    color:
-                        0x222222
-
-                });
-
-
-            const outline =
+            const boxOutline =
                 new THREE.LineSegments(
 
                     edges,
 
-                    edgeMaterial
+                    new THREE.LineBasicMaterial({
 
+                        color:
+                            0x222222
+                    })
                 );
 
 
-            outline.position.copy(
-                mesh.position
+            mesh.add(
+                boxOutline
             );
 
 
             scene.add(
-                outline
+                mesh
             );
 
-        }
 
+            if (
+                isConestoga
+            ) {
+
+                draggableMeshes.push(
+                    mesh
+                );
+            }
+        }
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        GRID
-    ----------------------------------------------------- */
+    ===================================================== */
 
     const maxDimension =
         Math.max(
@@ -1355,21 +2209,15 @@ function render3D(
             container.width,
 
             container.height
-
         );
-
-
-    const gridSize =
-        maxDimension * 2;
 
 
     const grid =
         new THREE.GridHelper(
 
-            gridSize,
+            maxDimension * 2,
 
             20
-
         );
 
 
@@ -1380,7 +2228,6 @@ function render3D(
         0,
 
         container.width / 2
-
     );
 
 
@@ -1389,26 +2236,26 @@ function render3D(
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        AXES
-    ----------------------------------------------------- */
+    ===================================================== */
 
-    const axesHelper =
+    const axes =
         new THREE.AxesHelper(
 
-            maxDimension * 0.5
-
+            maxDimension *
+            0.5
         );
 
 
     scene.add(
-        axesHelper
+        axes
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        CAMERA POSITION
-    ----------------------------------------------------- */
+    ===================================================== */
 
     const centerX =
         container.length / 2;
@@ -1422,21 +2269,21 @@ function render3D(
         container.width / 2;
 
 
-    const cameraDistance =
-        maxDimension * 1.15;
+    const distance =
+        maxDimension *
+        1.15;
 
 
     camera.position.set(
 
         centerX +
-        cameraDistance * 0.75,
+        distance * 0.65,
 
         centerY +
-        cameraDistance * 0.65,
+        distance * 0.80,
 
         centerZ +
-        cameraDistance * 0.85
-
+        distance * 0.65
     );
 
 
@@ -1447,13 +2294,12 @@ function render3D(
         centerY,
 
         centerZ
-
     );
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
        ORBIT CONTROLS
-    ----------------------------------------------------- */
+    ===================================================== */
 
     controls =
         new OrbitControls(
@@ -1461,7 +2307,6 @@ function render3D(
             camera,
 
             renderer.domElement
-
         );
 
 
@@ -1472,7 +2317,6 @@ function render3D(
         centerY,
 
         centerZ
-
     );
 
 
@@ -1492,20 +2336,41 @@ function render3D(
         true;
 
 
-    controls.minDistance =
-        maxDimension * 0.5;
-
-
-    controls.maxDistance =
-        maxDimension * 10;
-
-
     controls.update();
 
 
-    /* -----------------------------------------------------
+    /* =====================================================
+       CUSTOM CONESTOGA DRAGGING
+       DRAG ON TRAILER FLOOR
+    ===================================================== */
+
+    if (
+        isConestoga &&
+        draggableMeshes.length > 0
+    ) {
+
+        setupConestogaDragging(
+
+            renderer.domElement,
+
+            camera,
+
+            controls,
+
+            draggableMeshes,
+
+            container,
+
+            leftWeightLabel,
+
+            rightWeightLabel
+        );
+    }
+
+
+    /* =====================================================
        ANIMATION
-    ----------------------------------------------------- */
+    ===================================================== */
 
     function animate() {
 
@@ -1523,12 +2388,496 @@ function render3D(
             scene,
 
             camera
-
         );
     }
 
 
     animate();
+}
+
+
+/* =========================================================
+   CUSTOM CONESTOGA DRAGGING
+========================================================= */
+
+function setupConestogaDragging(
+    canvas,
+    camera,
+    orbitControls,
+    meshes,
+    container,
+    leftLabel,
+    rightLabel
+) {
+
+    const raycaster =
+        new THREE.Raycaster();
+
+
+    const pointer =
+        new THREE.Vector2();
+
+
+    let selectedMesh =
+        null;
+
+
+    let dragPlane =
+        null;
+
+
+    let dragOffset =
+        new THREE.Vector3();
+
+
+    function setPointer(
+        event
+    ) {
+
+        const rect =
+            canvas.getBoundingClientRect();
+
+
+        pointer.x =
+            (
+                (
+                    event.clientX -
+                    rect.left
+                ) /
+                rect.width
+            ) * 2 - 1;
+
+
+        pointer.y =
+            -(
+                (
+                    event.clientY -
+                    rect.top
+                ) /
+                rect.height
+            ) * 2 + 1;
+    }
+
+
+    function pointerDown(
+        event
+    ) {
+
+        if (
+            event.button !== 0
+        ) {
+
+            return;
+        }
+
+
+        setPointer(event);
+
+
+        raycaster.setFromCamera(
+            pointer,
+            camera
+        );
+
+
+        const intersections =
+            raycaster.intersectObjects(
+
+                meshes,
+
+                false
+            );
+
+
+        if (
+            intersections.length === 0
+        ) {
+
+            return;
+        }
+
+
+        selectedMesh =
+            intersections[0].object;
+
+
+        orbitControls.enabled =
+            false;
+
+
+        canvas.style.cursor =
+            "grabbing";
+
+
+        /*
+           Horizontal plane at the
+           center-height of package.
+
+           Pointer movement now maps
+           directly to X/Z trailer floor.
+        */
+
+        dragPlane =
+            new THREE.Plane(
+
+                new THREE.Vector3(
+                    0,
+                    1,
+                    0
+                ),
+
+                -selectedMesh.position.y
+            );
+
+
+        const point =
+            new THREE.Vector3();
+
+
+        if (
+            raycaster.ray.intersectPlane(
+                dragPlane,
+                point
+            )
+        ) {
+
+            dragOffset.copy(
+                selectedMesh.position
+            ).sub(
+                point
+            );
+        }
+
+
+        selectedMesh.material.opacity =
+            1;
+
+
+        canvas.setPointerCapture?.(
+            event.pointerId
+        );
+    }
+
+
+    function pointerMove(
+        event
+    ) {
+
+        if (
+            !selectedMesh
+        ) {
+
+            return;
+        }
+
+
+        setPointer(event);
+
+
+        raycaster.setFromCamera(
+            pointer,
+            camera
+        );
+
+
+        const point =
+            new THREE.Vector3();
+
+
+        if (
+            !raycaster.ray.intersectPlane(
+                dragPlane,
+                point
+            )
+        ) {
+
+            return;
+        }
+
+
+        point.add(
+            dragOffset
+        );
+
+
+        const halfLength =
+            selectedMesh.userData.length /
+            2;
+
+
+        const halfWidth =
+            selectedMesh.userData.width /
+            2;
+
+
+        const halfHeight =
+            selectedMesh.userData.height /
+            2;
+
+
+        /* LENGTH */
+
+        selectedMesh.position.x =
+            THREE.MathUtils.clamp(
+
+                point.x,
+
+                halfLength,
+
+                container.length -
+                halfLength
+            );
+
+
+        /* WIDTH = LEFT / RIGHT */
+
+        selectedMesh.position.z =
+            THREE.MathUtils.clamp(
+
+                point.z,
+
+                halfWidth,
+
+                container.width -
+                halfWidth
+            );
+
+
+        /* KEEP ON FLOOR */
+
+        selectedMesh.position.y =
+            halfHeight;
+
+
+        updateWeightsFrom3D(
+
+            meshes,
+
+            container,
+
+            leftLabel,
+
+            rightLabel
+        );
+    }
+
+
+    function pointerUp(
+        event
+    ) {
+
+        if (
+            !selectedMesh
+        ) {
+
+            return;
+        }
+
+
+        selectedMesh.material.opacity =
+            0.9;
+
+
+        selectedMesh =
+            null;
+
+
+        dragPlane =
+            null;
+
+
+        orbitControls.enabled =
+            true;
+
+
+        canvas.style.cursor =
+            "grab";
+
+
+        updateWeightsFrom3D(
+
+            meshes,
+
+            container,
+
+            leftLabel,
+
+            rightLabel
+        );
+
+
+        canvas.releasePointerCapture?.(
+            event.pointerId
+        );
+    }
+
+
+    canvas.addEventListener(
+        "pointerdown",
+        pointerDown
+    );
+
+
+    canvas.addEventListener(
+        "pointermove",
+        pointerMove
+    );
+
+
+    canvas.addEventListener(
+        "pointerup",
+        pointerUp
+    );
+
+
+    canvas.addEventListener(
+        "pointercancel",
+        pointerUp
+    );
+
+
+    activeDragCleanup =
+        () => {
+
+            canvas.removeEventListener(
+                "pointerdown",
+                pointerDown
+            );
+
+            canvas.removeEventListener(
+                "pointermove",
+                pointerMove
+            );
+
+            canvas.removeEventListener(
+                "pointerup",
+                pointerUp
+            );
+
+            canvas.removeEventListener(
+                "pointercancel",
+                pointerUp
+            );
+        };
+}
+
+
+/* =========================================================
+   LIVE LEFT / RIGHT CALCULATION
+========================================================= */
+
+function updateWeightsFrom3D(
+    meshes,
+    container,
+    leftLabel,
+    rightLabel
+) {
+
+    if (
+        container.name !==
+        "Conestoga"
+    ) {
+
+        return;
+    }
+
+
+    let leftWeight =
+        0;
+
+
+    let rightWeight =
+        0;
+
+
+    /*
+       IMPORTANT
+
+       X = trailer length
+       Y = height
+       Z = trailer width
+
+       Therefore Z decides
+       LEFT versus RIGHT.
+    */
+
+    const center =
+        container.width /
+        2;
+
+
+    meshes.forEach(
+
+        mesh => {
+
+            const weight =
+                Number(
+                    mesh.userData.weight
+                ) || 0;
+
+
+            if (
+                mesh.position.z <
+                center
+            ) {
+
+                leftWeight +=
+                    weight;
+            }
+
+            else {
+
+                rightWeight +=
+                    weight;
+            }
+        }
+    );
+
+
+    /* UPDATE INFORMATION PANEL */
+
+    updateConestogaStats(
+
+        leftWeight,
+
+        rightWeight,
+
+        meshes.length
+    );
+
+
+    /* UPDATE 3D LEFT LABEL */
+
+    if (
+        leftLabel &&
+        leftLabel.userData.updateText
+    ) {
+
+        leftLabel.userData.updateText(
+
+            `Left: ${
+                leftWeight
+                    .toLocaleString()
+            } lbs`
+        );
+    }
+
+
+    /* UPDATE 3D RIGHT LABEL */
+
+    if (
+        rightLabel &&
+        rightLabel.userData.updateText
+    ) {
+
+        rightLabel.userData.updateText(
+
+            `Right: ${
+                rightWeight
+                    .toLocaleString()
+            } lbs`
+        );
+    }
 }
 
 
@@ -1543,11 +2892,8 @@ window.addEventListener(
     () => {
 
         if (
-
             !renderer ||
-
             !camera
-
         ) {
 
             return;
@@ -1561,11 +2907,8 @@ window.addEventListener(
 
 
         if (
-
             host.clientWidth === 0 ||
-
             host.clientHeight === 0
-
         ) {
 
             return;
@@ -1575,7 +2918,6 @@ window.addEventListener(
         camera.aspect =
 
             host.clientWidth /
-
             host.clientHeight;
 
 
@@ -1587,9 +2929,6 @@ window.addEventListener(
             host.clientWidth,
 
             host.clientHeight
-
         );
-
     }
-
 );

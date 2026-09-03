@@ -56,3 +56,111 @@
     line-height: 1.5;
     color: #333;
 }
+/* ==============================
+   PROFESSIONAL HEADER
+============================== */
+
+body {
+    margin: 0;
+}
+
+
+.main-header {
+    width: 100%;
+    box-sizing: border-box;
+
+    background: #c8102e;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 45px;
+
+    color: white;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+
+    position: relative;
+    z-index: 1000;
+}
+
+
+.header-title {
+    color: white;
+
+    font-size: 24px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+}
+
+
+.header-creators {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    color: white;
+
+    font-size: 14px;
+}
+
+
+.created-label {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+
+.header-creators a {
+    color: white;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: opacity 0.2s ease;
+}
+
+
+.header-creators a:hover {
+    opacity: 0.75;
+
+    text-decoration: underline;
+}
+
+
+.divider {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .main-header {
+        flex-direction: column;
+
+        justify-content: center;
+
+        gap: 8px;
+
+        padding: 14px 20px;
+    }
+
+
+    .header-title {
+        font-size: 21px;
+    }
+
+
+    .header-creators {
+        font-size: 12px;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+}
