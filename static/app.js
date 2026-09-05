@@ -148,7 +148,7 @@ function updateContainer() {
         containerLength.readOnly = false;
 
         containerWidth.value = 8.6;
-        containerHeight.value = 6.6;
+        containerHeight.value = 8.6;
 
         containerWidth.readOnly = true;
         containerHeight.readOnly = true;
@@ -1857,9 +1857,7 @@ function render3D(
             ) || 0;
 
 
-        /* =================================================
-           LEFT WEIGHT LABEL
-        ================================================= */
+        /* LEFT WEIGHT LABEL */
 
         leftWeightLabel =
             createWeightLabel(
@@ -1885,9 +1883,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           RIGHT WEIGHT LABEL
-        ================================================= */
+        /* RIGHT WEIGHT LABEL */
 
         rightWeightLabel =
             createWeightLabel(
@@ -1913,9 +1909,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           FIRST HALF OF LENGTH - LEFT SECTION
-        ================================================= */
+        /* LEFT FLOOR */
 
         const leftFloorGeometry =
             new THREE.PlaneGeometry(
@@ -1969,9 +1963,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           SECOND HALF OF LENGTH - RIGHT SECTION
-        ================================================= */
+        /* RIGHT FLOOR */
 
         const rightFloorGeometry =
             new THREE.PlaneGeometry(
@@ -2025,9 +2017,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           LEFT SECTION LABEL
-        ================================================= */
+        /* LEFT SECTION LABEL */
 
         const leftSideLabel =
             createSideLabel(
@@ -2051,9 +2041,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           RIGHT SECTION LABEL
-        ================================================= */
+        /* RIGHT SECTION LABEL */
 
         const rightSideLabel =
             createSideLabel(
@@ -2077,10 +2065,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           CENTER DIVIDER WALL
-           CUTS ACROSS WIDTH AT HALF LENGTH
-        ================================================= */
+        /* CENTER DIVIDER */
 
         const dividerGeometry =
             new THREE.PlaneGeometry(
@@ -2134,9 +2119,7 @@ function render3D(
         );
 
 
-        /* =================================================
-           RED CENTER LINE ACROSS TRAILER WIDTH
-        ================================================= */
+        /* CENTER FLOOR LINE */
 
         const linePoints = [
 
@@ -2448,7 +2431,7 @@ function render3D(
 
 
     /* =====================================================
-       CONESTOGA DRAGGING
+       CONESTOGA DRAGGING + STACKING
     ===================================================== */
 
     if (
@@ -2473,14 +2456,6 @@ function render3D(
             rightWeightLabel
         );
 
-
-        /*
-            Backend may still calculate its original
-            side values differently.
-
-            Recalculate using the new LENGTH-based
-            split immediately after rendering.
-        */
 
         updateWeightsFrom3D(
 
@@ -2524,7 +2499,7 @@ function render3D(
 
 
 /* =========================================================
-   CONESTOGA DRAGGING
+   CONESTOGA DRAGGING + STACKING
 ========================================================= */
 
 function setupConestogaDragging(
@@ -2638,6 +2613,13 @@ function setupConestogaDragging(
             "grabbing";
 
 
+        /*
+            Horizontal drag plane.
+
+            The package moves in X/Z
+            while dragging.
+        */
+
         dragPlane =
             new THREE.Plane(
 
@@ -2733,12 +2715,9 @@ function setupConestogaDragging(
             2;
 
 
-        const halfHeight =
-            selectedMesh.userData.height /
-            2;
-
-
-        /* MOVE ALONG TRAILER LENGTH */
+        /*
+            Move along trailer length
+        */
 
         selectedMesh.position.x =
             THREE.MathUtils.clamp(
@@ -2752,7 +2731,9 @@ function setupConestogaDragging(
             );
 
 
-        /* MOVE ACROSS TRAILER WIDTH */
+        /*
+            Move across trailer width
+        */
 
         selectedMesh.position.z =
             THREE.MathUtils.clamp(
@@ -2766,13 +2747,16 @@ function setupConestogaDragging(
             );
 
 
-        /* KEEP PACKAGE ON FLOOR */
+        /*
+            We DO NOT force Y to floor here.
 
-        selectedMesh.position.y =
-            halfHeight;
+            Package keeps its vertical
+            position while dragging.
 
+            On release, stacking logic
+            calculates the correct Y.
+        */
 
-        /* LIVE UPDATE */
 
         updateWeightsFrom3D(
 
@@ -2796,6 +2780,67 @@ function setupConestogaDragging(
         ) {
 
             return;
+        }
+
+
+        const halfHeight =
+            selectedMesh.userData.height /
+            2;
+
+
+        /*
+            Find highest valid surface
+            below selected package.
+        */
+
+        const stackHeight =
+            getStackHeight(
+
+                selectedMesh,
+
+                meshes
+            );
+
+
+        const newCenterY =
+            stackHeight +
+            halfHeight;
+
+
+        const packageTop =
+            newCenterY +
+            halfHeight;
+
+
+        /*
+            Only place it there if it
+            fits inside trailer height.
+        */
+
+        if (
+            packageTop <=
+            container.height
+        ) {
+
+            selectedMesh.position.y =
+                newCenterY;
+        }
+
+        else {
+
+            /*
+                Stack is too high.
+
+                Return package to floor.
+            */
+
+            selectedMesh.position.y =
+                halfHeight;
+
+
+            alert(
+                "Package cannot be stacked here because the total stack height exceeds the trailer height."
+            );
         }
 
 
@@ -2869,15 +2914,18 @@ function setupConestogaDragging(
                 pointerDown
             );
 
+
             canvas.removeEventListener(
                 "pointermove",
                 pointerMove
             );
 
+
             canvas.removeEventListener(
                 "pointerup",
                 pointerUp
             );
+
 
             canvas.removeEventListener(
                 "pointercancel",
@@ -2888,13 +2936,159 @@ function setupConestogaDragging(
 
 
 /* =========================================================
+   STACKING LOGIC
+
+   Finds the highest package underneath
+   the selected package.
+
+   If no package is underneath:
+   returns 0 = trailer floor.
+========================================================= */
+
+function getStackHeight(
+    selectedMesh,
+    meshes
+) {
+
+    let highestTop =
+        0;
+
+
+    const selectedHalfLength =
+        selectedMesh.userData.length /
+        2;
+
+
+    const selectedHalfWidth =
+        selectedMesh.userData.width /
+        2;
+
+
+    const selectedMinX =
+        selectedMesh.position.x -
+        selectedHalfLength;
+
+
+    const selectedMaxX =
+        selectedMesh.position.x +
+        selectedHalfLength;
+
+
+    const selectedMinZ =
+        selectedMesh.position.z -
+        selectedHalfWidth;
+
+
+    const selectedMaxZ =
+        selectedMesh.position.z +
+        selectedHalfWidth;
+
+
+    meshes.forEach(
+        mesh => {
+
+            /*
+                Do not compare package
+                against itself.
+            */
+
+            if (
+                mesh ===
+                selectedMesh
+            ) {
+
+                return;
+            }
+
+
+            const halfLength =
+                mesh.userData.length /
+                2;
+
+
+            const halfWidth =
+                mesh.userData.width /
+                2;
+
+
+            const halfHeight =
+                mesh.userData.height /
+                2;
+
+
+            const minX =
+                mesh.position.x -
+                halfLength;
+
+
+            const maxX =
+                mesh.position.x +
+                halfLength;
+
+
+            const minZ =
+                mesh.position.z -
+                halfWidth;
+
+
+            const maxZ =
+                mesh.position.z +
+                halfWidth;
+
+
+            /*
+                Check overlap on trailer
+                floor: X + Z.
+            */
+
+            const overlapX =
+                selectedMinX <
+                    maxX &&
+                selectedMaxX >
+                    minX;
+
+
+            const overlapZ =
+                selectedMinZ <
+                    maxZ &&
+                selectedMaxZ >
+                    minZ;
+
+
+            if (
+                overlapX &&
+                overlapZ
+            ) {
+
+                const topOfPackage =
+                    mesh.position.y +
+                    halfHeight;
+
+
+                if (
+                    topOfPackage >
+                    highestTop
+                ) {
+
+                    highestTop =
+                        topOfPackage;
+                }
+            }
+        }
+    );
+
+
+    return highestTop;
+}
+
+
+/* =========================================================
    LIVE LEFT / RIGHT WEIGHT CALCULATION
 
-   IMPORTANT:
    X = TRAILER LENGTH
 
-   FIRST HALF OF X = LEFT SECTION
-   SECOND HALF OF X = RIGHT SECTION
+   FIRST HALF = LEFT SECTION
+   SECOND HALF = RIGHT SECTION
 ========================================================= */
 
 function updateWeightsFrom3D(
@@ -2937,9 +3131,8 @@ function updateWeightsFrom3D(
 
 
             /*
-                PACKAGE CENTER BEFORE
-                HALF OF TRAILER LENGTH
-                = LEFT SECTION
+                FIRST HALF OF TRAILER
+                LENGTH
             */
 
             if (
